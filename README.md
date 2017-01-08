@@ -11,12 +11,14 @@
 
 ## Server
 - Parameters
+
     ```
     NEED_AUTH = True
     AUTH_USER = user
     AUTH_PASSWD = passwd
     PORT = port
     ```
+
 - Usages
 
 | Auth | URL                                     | Return              |
@@ -30,10 +32,12 @@
 ## Client
 - Rent an ADSL VPS
 - Parameters
+
     ```
     AUTH = (user, passwd)
     HOST = host
     ```
+
 - Run: `python3 /opt/autoproxy/client.py`
 
 
@@ -44,6 +48,7 @@
 
 ## Others
 - Supervisord conf: `autoproxy.ini`
+
     ```
     # Autoproxy
     [program:autoproxy]

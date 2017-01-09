@@ -37,7 +37,7 @@ def status():
         return 'Invalid action.'
     else:
         with open('status.txt', 'r') as f:
-            status = f.read().strip()
+            status = f.read()
         return status
 
 
@@ -67,7 +67,7 @@ def proxy():
         return 'Invalid action.'
     else:
         with open('proxy.txt', 'r') as f:
-            proxy = f.read().strip()
+            proxy = f.read()
         return proxy
 
 

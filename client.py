@@ -29,19 +29,21 @@ def receive_status():
 
 def set_new_proxy():
     old_proxy = get_req(url_check_proxy, auth=AUTH).text
-    sleep(0.25)
+    sleep(0.2)
     result = get_req(url_set_proxy, auth=AUTH).text
-    sleep(0.25)
+    sleep(0.2)
     new_proxy = get_req(url_check_proxy, auth=AUTH).text
     
     from datetime import datetime
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    if result == 'Done' and proxy != new_proxy:
-        print('[{}]: {} change to {}.'.format(now, proxy, new_proxy), file=open('proxy.log', 'a'))
+    if result == 'Done' and old_proxy != new_proxy:
+        print('[{}]: {} change to {}.'.format(now, old_proxy, new_proxy), 
+              file=open('proxy.log', 'a'))
         return True
     else:
-        print('[{}]: error happened when changing proxy {} to {}.'.format(now, proxy, new_proxy), file=open('proxy.log', 'a'))
+        print('[{}]: error happened when changing proxy {} to {}.'.format(now, old_proxy, new_proxy), 
+               file=open('proxy.log', 'a'))
         return False
 
 def reset_ip():

@@ -15,43 +15,47 @@ url_check_proxy = 'http://{}:5000/proxy/'.format(HOST)
 url_set_proxy = 'http://{}:5000/proxy/?act=set'.format(HOST)
 
 
-def get_req(url, auth=None):
+def get_resp(url, auth=None):
     from requests import get
-    return get(url, headers={'connection': 'close'}, stream=False, auth=auth)
+    return get(url, headers={'connection': 'close'}, stream=False, auth=auth).text
 
 def check_status():
-    status = get_req(url_check_status).text
+    status = get_resp(url_check_status)
     return True if status == 'True' else False
 
 def receive_status():
-    result = get_req(url_receive_status).text
+    result = get_resp(url_receive_status)
     return True if result == 'Done' else False
 
 def set_new_proxy():
-    old_proxy = get_req(url_check_proxy, auth=AUTH).text
+    old_proxy = get_resp(url_check_proxy, auth=AUTH)
     sleep(0.2)
-    result = get_req(url_set_proxy, auth=AUTH).text
+    result = get_resp(url_set_proxy, auth=AUTH)
     sleep(0.2)
-    new_proxy = get_req(url_check_proxy, auth=AUTH).text
+    new_proxy = get_resp(url_check_proxy, auth=AUTH)
+    
+    old_ip = old_proxy.spilt(':')[0]
+    new_ip = new_proxy.spilt(':')[0]
     
     from datetime import datetime
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    if result == 'Done' and old_proxy != new_proxy:
-        print('[{}]: {} change to {}.'.format(now, old_proxy, new_proxy), 
-              file=open('proxy.log', 'a'))
+    if result == 'Done' and old_ip != new_ip:
+        print('[{}]: {} change to {}.'.format(now, old_ip, new_ip), 
+                                       file=open('proxy.log', 'a'))
         return True
     else:
-        print('[{}]: error happened when changing proxy {} to {}.'.format(now, old_proxy, new_proxy), 
-               file=open('proxy.log', 'a'))
+        print('[{}]: error happened when changing proxy {} to {}.'.format(now, old_ip, new_ip), 
+                                                                   file=open('proxy.log', 'a'))
         return False
 
 def reset_ip():
     from os import system as cmd
-    cmd('pppoe-stop')
+    cmd('/sbin/pppoe-stop')
     sleep(0.2)
-    cmd('pppoe-start')
-    sleep(0.8)
+    cmd('/sbin/pppoe-start')
+    cmd('/usr/sbin/squid restart')
+    sleep(1)
 
 
 if __name__ == '__main__':

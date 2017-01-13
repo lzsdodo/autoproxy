@@ -34,8 +34,8 @@ def set_new_proxy():
     sleep(0.2)
     new_proxy = get_resp(url_check_proxy, auth=AUTH)
     
-    old_ip = old_proxy.spilt(':')[0]
-    new_ip = new_proxy.spilt(':')[0]
+    old_ip = old_proxy.split(':')[0]
+    new_ip = new_proxy.split(':')[0]
     
     from datetime import datetime
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
